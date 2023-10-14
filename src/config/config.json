@@ -8,6 +8,7 @@
     "define": {
       "freezeTableName": true
     }
+  
   },
   "test": {
     "username": "root",

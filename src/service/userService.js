@@ -23,27 +23,33 @@ const createNewUser = async(email, password, username)=>{
 }
 
 const getUserList = async()=> {
-    const connection = await mysql.createConnection({host:'localhost', user: 'root', database: 'jwt', Promise: bluebird});
-    const [rows, fields] = await connection.execute('SELECT * FROM User');
-    return rows;
+    let  users = [];
+    users = await db.User.findAll();
+    return users;
     
 }
 
-const deleteUser = async(id)=> {
-    const connection = await mysql.createConnection({host:'localhost', user: 'root', database: 'jwt', Promise: bluebird});
-    const [rows, fields] = await connection.execute('DELETE FROM User WHERE id =?', [id]);
+const deleteUser = async(userId)=> {
+    await db.User.destroy({
+        where: {id : userId}
+    })
 }
 
 const getUserById = async(id) => {
-    const connection = await mysql.createConnection({host:'localhost', user: 'root', database: 'jwt', Promise: bluebird});
-    const [rows, fields] = await connection.execute('SELECT * FROM User WHERE id =?', [id]);
-    return rows;
+    let user = {};
+    user = await db.User.findOne({
+        where: {id : id}
+    });
+
+    return user;
 }
 
 const updateUserInfo  = async(email, username,id)=>{
-    const connection = await mysql.createConnection({host:'localhost', user: 'root', database: 'jwt', Promise: bluebird});
-    const [rows, fields] = await connection.execute('UPDATE User SET email = ?, username = ? WHERE id =?', [email, username,id]);
-    return rows;
+    await db.User.update(
+        {   email: email, 
+            username: username}, 
+            {
+                where: {id: id}})
 }
 module.exports = {
     createNewUser, 
